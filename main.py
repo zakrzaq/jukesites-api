@@ -1,14 +1,15 @@
 from os import name
 from flask import Flask, request
+from flask_cors import CORS
 
 
 from utils.use import use_envs
 from api.enquiries import send_enquiry
-from models.enquiries import Enquiry
 
 use_envs()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route("/")
@@ -18,8 +19,7 @@ def root():
 @app.route("/enquiries/send", methods=['POST'])
 def enquiries_send():
     body = request.get_json()
-    print(body)
-    res = send_enquiry(Enquiry(**body))
+    res = send_enquiry(body)
     return res
 
 
